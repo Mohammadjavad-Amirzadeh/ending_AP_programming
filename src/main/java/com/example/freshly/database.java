@@ -2,11 +2,6 @@ package com.example.freshly;
 
 import java.sql.*;
 
-
-/**
- *
- * @author WINDOWS 10
- */
 public class database {
 
     public static Connection connectDB() {

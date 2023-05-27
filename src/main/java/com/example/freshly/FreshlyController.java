@@ -13,10 +13,7 @@ import javafx.util.Duration;
 import javafx.scene.control.PasswordField;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -175,6 +172,54 @@ public class FreshlyController implements Initializable {
         //playing the transition
         fd.play();
     }
+    public void getLogin(ActionEvent e){
+        if (e.getSource()==LoginButton){
+            if (CheckFieldsLoginPane()){
+                connect = database.connectDB();
+                try {
+                    statement=connect.createStatement();
+                    result = statement.executeQuery("SELECT Username , Password FROM costumer WHERE Username = '"+UsenameTextFieldLoginPane.getText()+"' AND Password='"+PasswordfTextFieldLoginPane.getText()+"'");
+                    if (result.next()){
+                        //Todo Login Works
+                        System.out.println("Login Successfully");
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Login Successfully");
+                        alert.showAndWait();
+                    }else {
+                        //Todo Incorrect Pass/User
+                        System.out.println("Incorrect Pass/User");
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Incorrect Pass/User");
+                        alert.showAndWait();
+                    }
+                }catch (Exception exception){
+                    System.out.println(exception.getMessage());
+                }
+
+            }else {
+                //Todo anything is Empty
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Username Or Password is Empty");
+                alert.showAndWait();
+            }
+        }
+    }
+    private Boolean CheckFieldsLoginPane(){
+        boolean result ;
+        if (UsenameTextFieldLoginPane.getText().isEmpty() ||
+                PasswordfTextFieldLoginPane.getText().isEmpty()){
+            result = false;
+        }else {
+            result=true;
+        }
+        return result;
+    }
     public void createAccount(ActionEvent actionEvent){
         if (actionEvent.getSource()==CreateAccountButton){
             if (checkFieldsSignUpPane()){
@@ -225,7 +270,7 @@ public class FreshlyController implements Initializable {
                         }
                     }
                     if (ChooseRoleComboBox.getSelectionModel().getSelectedItem()=="فروشنده") {
-                        result = statement.executeQuery("SELECT Username FROM costumer WHERE UserName = '"+UsernameTextField.getText()+"'");
+                        result = statement.executeQuery("SELECT Username FROM seller WHERE UserName = '"+UsernameTextField.getText()+"'");
                         if (result.next()){
                             //Todo Username has taken
                             System.out.println("already taken");
@@ -248,7 +293,7 @@ public class FreshlyController implements Initializable {
                             if (matcher.matches()) {
                                 //Todo Account Successfully Created
                                 System.out.println("Valid email address");
-                                statement.executeUpdate("INSERT INTO costumer (Username,Password,FirstName,LastName,PhoneNumber,EmailAddress) VALUES ('" + UsernameTextField.getText() + "','" + PasswordTextField.getText() + "','" + NameTextField.getText() + "','"+FamilyTextField.getText()+"','"+PhoneNumberTextField.getText()+"','"+EmailTextField.getText()+"')");
+                                statement.executeUpdate("INSERT INTO seller (Username,Password,FirstName,LastName,PhoneNumber,EmailAddress) VALUES ('" + UsernameTextField.getText() + "','" + PasswordTextField.getText() + "','" + NameTextField.getText() + "','"+FamilyTextField.getText()+"','"+PhoneNumberTextField.getText()+"','"+EmailTextField.getText()+"')");
                                 alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Information Message");
                                 alert.setHeaderText(null);

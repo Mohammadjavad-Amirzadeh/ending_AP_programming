@@ -12,7 +12,7 @@
             <children>
                 <AnchorPane prefHeight="600.0" prefWidth="1000.0" styleClass="section" stylesheets="@Style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Pane fx:id="LoginPane" layoutX="263.0" layoutY="59.0" prefHeight="475.0" prefWidth="475.0" styleClass="contentPane" stylesheets="@Style.css" visible="false">
+                        <Pane fx:id="LoginPane" layoutX="263.0" layoutY="59.0" prefHeight="475.0" prefWidth="475.0" styleClass="contentPane" stylesheets="@Style.css">
                             <children>
                                 <TextField fx:id="UsenameTextFieldLoginPane" alignment="CENTER_RIGHT" layoutX="73.0" layoutY="193.0" prefHeight="39.0" prefWidth="329.0" promptText="نام کاربری" />
                                 <Label fx:id="LoginText" alignment="CENTER_RIGHT" ellipsisString="15" layoutX="200.0" layoutY="134.0" prefHeight="39.0" prefWidth="200.0" styleClass="LoginText" stylesheets="@Style.css" text=" ورود به حساب کاربری" textFill="WHITE" textOverrun="CLIP">
@@ -27,7 +27,7 @@
                                 </ImageView>
                                 <PasswordField fx:id="PasswordfTextFieldLoginPane" alignment="CENTER_RIGHT" layoutX="73.0" layoutY="247.0" prefHeight="39.0" prefWidth="329.0" promptText="رمز عبور" />
                                 <Hyperlink fx:id="ForgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="151.0" layoutY="294.0" onAction="#SwitchToForgotPasswordPage" prefHeight="24.0" prefWidth="174.0" styleClass="forgotpassword" stylesheets="@Style.css" text="رمز عبور را فراموش کرده اید؟" textAlignment="CENTER" textFill="WHITE" />
-                                <Button fx:id="LoginButton" alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="73.0" layoutY="335.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="329.0" scaleShape="false" styleClass="loginButton" stylesheets="@Style.css" text="ورود" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
+                                <Button fx:id="LoginButton" alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="73.0" layoutY="335.0" mnemonicParsing="false" onAction="#getLogin" prefHeight="39.0" prefWidth="329.0" scaleShape="false" styleClass="loginButton" stylesheets="@Style.css" text="ورود" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
@@ -68,7 +68,7 @@
                                 <Hyperlink fx:id="BackToLoginPage" alignment="CENTER" layoutX="171.0" layoutY="393.0" onAction="#SwitchToLoginPageFromForgotPasswordPage" styleClass="forgotpassword" stylesheets="@Style.css" text="بازگشت به صفحه ورود" />
                             </children>
                         </Pane>
-                        <Pane fx:id="SignupPane" layoutX="263.0" layoutY="59.0" prefHeight="475.0" prefWidth="475.0" styleClass="contentPane" stylesheets="@Style.css">
+                        <Pane fx:id="SignupPane" layoutX="263.0" layoutY="59.0" prefHeight="475.0" prefWidth="475.0" styleClass="contentPane" stylesheets="@Style.css" visible="false">
                             <children>
                                 <Label fx:id="CreateAccountText" alignment="CENTER_RIGHT" ellipsisString="15" layoutX="206.0" layoutY="65.0" prefHeight="39.0" prefWidth="200.0" styleClass="LoginText" stylesheets="@Style.css" text=" ثبت نام" textFill="WHITE" textOverrun="CLIP">
                                     <font>
