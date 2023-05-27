@@ -13,9 +13,15 @@ import javafx.util.Duration;
 import javafx.scene.control.PasswordField;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FreshlyController implements Initializable {
     @FXML
@@ -90,6 +96,11 @@ public class FreshlyController implements Initializable {
     @FXML
     private TextField VerificationٍEmailTextField;
 
+    private Connection connect;
+    private PreparedStatement prepare;
+    private Statement statement;
+    private ResultSet result;
+    private Alert alert;
 
     public void SetChooseRole(){
         String[]RoleList = {"خریدار" , "فروشنده"};
@@ -163,6 +174,135 @@ public class FreshlyController implements Initializable {
 
         //playing the transition
         fd.play();
+    }
+    public void createAccount(ActionEvent actionEvent){
+        if (actionEvent.getSource()==CreateAccountButton){
+            if (checkFieldsSignUpPane()){
+                connect=database.connectDB();
+                try{
+                    statement=connect.createStatement();
+                    if (ChooseRoleComboBox.getSelectionModel().getSelectedItem()=="خریدار") {
+                        result = statement.executeQuery("SELECT Username FROM costumer WHERE UserName = '"+UsernameTextField.getText()+"'");
+                        if (result.next()){
+                            //Todo Username has taken
+                            System.out.println("already taken");
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Username has already taken");
+                            alert.showAndWait();
+                        }
+                        else {
+                            System.out.println("valid Username");
+                            String regex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                                    "[a-zA-Z0-9_+&*-]+)*@" +
+                                    "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                                    "A-Z]{2,7}$";
+
+                            Pattern pattern = Pattern.compile(regex);
+                            Matcher matcher = pattern.matcher(EmailTextField.getText());
+
+                            if (matcher.matches()) {
+                                //Todo Account Successfully Created
+                                System.out.println("Valid email address");
+                                statement.executeUpdate("INSERT INTO costumer (Username,Password,FirstName,LastName,PhoneNumber,EmailAddress) VALUES ('" + UsernameTextField.getText() + "','" + PasswordTextField.getText() + "','" + NameTextField.getText() + "','"+FamilyTextField.getText()+"','"+PhoneNumberTextField.getText()+"','"+EmailTextField.getText()+"')");
+                                alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information Message");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Account Successfully Created");
+                                alert.showAndWait();
+                                ClearLoginPaneTextFields();
+                            } else {
+                                //TODO Email Regex Is Invalid
+                                System.out.println("Invalid email address");
+                                alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error Message");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Invalid Email Address");
+                                alert.showAndWait();
+                            }
+
+                        }
+                    }
+                    if (ChooseRoleComboBox.getSelectionModel().getSelectedItem()=="فروشنده") {
+                        result = statement.executeQuery("SELECT Username FROM costumer WHERE UserName = '"+UsernameTextField.getText()+"'");
+                        if (result.next()){
+                            //Todo Username has taken
+                            System.out.println("already taken");
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Username has already taken");
+                            alert.showAndWait();
+                        }
+                        else {
+                            System.out.println("valid Username");
+                            String regex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                                    "[a-zA-Z0-9_+&*-]+)*@" +
+                                    "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                                    "A-Z]{2,7}$";
+
+                            Pattern pattern = Pattern.compile(regex);
+                            Matcher matcher = pattern.matcher(EmailTextField.getText());
+
+                            if (matcher.matches()) {
+                                //Todo Account Successfully Created
+                                System.out.println("Valid email address");
+                                statement.executeUpdate("INSERT INTO costumer (Username,Password,FirstName,LastName,PhoneNumber,EmailAddress) VALUES ('" + UsernameTextField.getText() + "','" + PasswordTextField.getText() + "','" + NameTextField.getText() + "','"+FamilyTextField.getText()+"','"+PhoneNumberTextField.getText()+"','"+EmailTextField.getText()+"')");
+                                alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information Message");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Account Successfully Created");
+                                alert.showAndWait();
+                                ClearLoginPaneTextFields();
+                            } else {
+                                //TODO Email Regex Is Invalid
+                                System.out.println("Invalid email address");
+                                alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Error Message");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Invalid Email Address");
+                                alert.showAndWait();
+                            }
+
+                        }
+                    }
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }else {
+                //TODO empty TextField
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
+                alert.setHeaderText(null);
+                alert.setContentText("empty Username/Password");
+                alert.showAndWait();
+            }
+        }
+    }
+    private Boolean checkFieldsSignUpPane(){
+        Boolean result=false;
+        if (UsernameTextField.getText().isEmpty() ||
+                PasswordTextField.getText().isEmpty() ||
+                NameTextField.getText().isEmpty() ||
+                FamilyTextField.getText().isEmpty() ||
+                PhoneNumberTextField.getText().isEmpty()||
+                ChooseRoleComboBox.getSelectionModel().getSelectedItem()==null||
+                EmailTextField.getText().isEmpty()){
+            result=false;
+        }else {
+            result=true;
+        }
+        return result;
+    }
+    public void ClearLoginPaneTextFields(){
+        UsernameTextField.setText("");
+        PasswordTextField.setText("");
+        NameTextField.setText("");
+        FamilyTextField.setText("");
+        PhoneNumberTextField.setText("");
+        ChooseRoleComboBox.setSelectionModel(null);
+        EmailTextField.setText("");
     }
 
     @Override
