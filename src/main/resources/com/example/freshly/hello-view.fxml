@@ -50,7 +50,7 @@
                                         <Image url="@../../../../../../../Freshly/Assets/freshlyText.png" />
                                     </image>
                                 </ImageView>
-                                <Button fx:id="ConfirmEmailButton" alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="73.0" layoutY="343.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="329.0" scaleShape="false" styleClass="loginButton" stylesheets="@Style.css" text="تایید" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
+                                <Button fx:id="ConfirmEmailButton" alignment="CENTER" cacheShape="false" centerShape="false" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="73.0" layoutY="343.0" mnemonicParsing="false" onAction="#rememberForgotPasswordToClient" prefHeight="39.0" prefWidth="329.0" scaleShape="false" styleClass="loginButton" stylesheets="@Style.css" text="تایید" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
                                     <font>
                                         <Font size="16.0" />
                                     </font>

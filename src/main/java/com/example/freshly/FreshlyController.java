@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.scene.control.PasswordField;
 
+import javax.mail.MessagingException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
@@ -99,6 +100,9 @@ public class FreshlyController implements Initializable {
     private ResultSet result;
     private Alert alert;
 
+    private final String EMAIL_REGEX =
+            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
     public void SetChooseRole(){
         String[]RoleList = {"خریدار" , "فروشنده"};
         List<String> ItemList = new ArrayList<>();
@@ -178,7 +182,7 @@ public class FreshlyController implements Initializable {
                 connect = database.connectDB();
                 try {
                     statement=connect.createStatement();
-                    result = statement.executeQuery("SELECT Username , Password FROM costumer WHERE Username = '"+UsenameTextFieldLoginPane.getText()+"' AND Password='"+PasswordfTextFieldLoginPane.getText()+"'");
+                    result = statement.executeQuery("SELECT Username , Password FROM costumer  WHERE Username = '"+UsenameTextFieldLoginPane.getText()+"' AND Password='"+PasswordfTextFieldLoginPane.getText()+"'");
                     if (result.next()){
                         //Todo Login Works
                         System.out.println("Login Successfully");
@@ -348,6 +352,60 @@ public class FreshlyController implements Initializable {
         PhoneNumberTextField.setText("");
         ChooseRoleComboBox.setSelectionModel(null);
         EmailTextField.setText("");
+    }
+    public void rememberForgotPasswordToClient(ActionEvent actionEvent){
+        if (actionEvent.getSource()==ConfirmEmailButton) {
+            System.out.println("tayeed");
+            if (checkEmailVerification()) {
+                connect = database.connectDB();
+                try {
+                    if (isValidEmail(VerificationٍEmailTextField.getText())) {
+                        statement = connect.createStatement();
+                        result = statement.executeQuery("SELECT Password FROM costumer WHERE EmailAddress = '" + VerificationٍEmailTextField.getText() + "'");
+                        if (result.next()) {
+                            String pass = result.getString("Password");
+                            int successfulEmailSend = 0;
+                            successfulEmailSend = EmailSender.sendEmail(VerificationٍEmailTextField.getText(),pass);
+                            if (successfulEmailSend == 1) {
+                                System.out.println("Done");
+                            } else if (successfulEmailSend == 0) {
+                                System.out.println("fail");
+                            }
+                        }else {
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Email Not Found");
+                            alert.showAndWait();
+                        }
+                    }else {
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Incorrect Email Address");
+                        alert.showAndWait();
+                    }
+                } catch (MessagingException e) {
+                    System.out.println(e.getMessage());
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+    private boolean checkEmailVerification(){
+        Boolean result = false;
+        if (VerificationٍEmailTextField.getText().isEmpty()){
+            result=false;
+        }else {
+            result=true;
+        }
+        return result;
+    }
+    private boolean isValidEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     @Override

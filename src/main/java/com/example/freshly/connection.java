@@ -10,8 +10,10 @@ public class connection {
     public static void main(String[] args) {
         connect = database.connectDB();
         try {
-            statement = connect.createStatement();
-            statement.executeUpdate("DELETE FROM costumer WHERE Username='admin'");
+            if (connect != null) {
+                statement = connect.createStatement();
+            }
+            statement.executeUpdate("DELETE FROM costumer WHERE Username='admin03'");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
